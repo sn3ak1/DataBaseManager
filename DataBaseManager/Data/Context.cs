@@ -16,35 +16,15 @@ namespace DataBaseManager.Data
                 "server=remotemysql.com;database=HEjS6WcHwB;user=HEjS6WcHwB;password=dpzDmZUHak");
         }
 
-        // protected override void OnModelCreating(ModelBuilder modelBuilder)
-        // {
-        //     base.OnModelCreating(modelBuilder);
-        //     
-        //     modelBuilder.Entity<Object>(entity =>
-        //     {
-        //         entity.HasKey(e => e.Id);
-        //         entity.Property(e => e.Name).IsRequired();
-        //     });
-        //
-        //     modelBuilder.Entity<IntProperty>(entity =>
-        //     {
-        //         entity.HasKey(e => e.Id);
-        //         entity.Property(e => e.Name).IsRequired();
-        //     });
-        //     
-        //     modelBuilder.Entity<StringProperty>(entity =>
-        //     {
-        //         entity.HasKey(e => e.Id);
-        //         entity.Property(e => e.Name).IsRequired();
-        //     });
-        //     
-        //     modelBuilder.Entity<EnumProperty>(entity =>
-        //     {
-        //         entity.HasKey(e => e.Id);
-        //         entity.Property(e => e.Name).IsRequired();
-        //         entity.HasMany(e => e.Flags);
-        //     });
-        // }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Category>()
+                .HasMany<Category>(c => c.Children)
+                .WithOne(e => e.Parent)
+                .OnDelete(DeleteBehavior.Cascade );
+        }
         
     }
 }

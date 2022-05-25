@@ -10,9 +10,9 @@ namespace DataBaseManager.Presentation
 {
     public partial class Form2 : Form
     {
-        private ToolStripMenuItem _addChildCategory;
-        private ToolStripMenuItem _addSiblingCategory;
-        private ToolStripMenuItem _removeCategory;
+        private readonly ToolStripMenuItem _addChildCategory;
+        private readonly ToolStripMenuItem _addSiblingCategory;
+        private readonly ToolStripMenuItem _removeCategory;
         
         public Form2()
         {
@@ -59,10 +59,7 @@ namespace DataBaseManager.Presentation
             {
                 item.Enabled = category!=null;
             }
-            if(category==null) return;
-            if (category.Children!=null && category.Children.Any())
-                _removeCategory.Enabled = false;
-            if (category.Id != 1) return;
+            if(category is not {Id: 1}) return;
             _addSiblingCategory.Enabled = false;
             _removeCategory.Enabled = false;
         }

@@ -9,9 +9,9 @@ namespace DataBaseManager.Presentation
 {
     public partial class FormAdd : Form
     {
-        private List<PropControl> _intPropControls = new List<PropControl>();
-        private List<PropControl> _stringPropControls = new List<PropControl>();
-        private List<PropControl> _enumPropControls = new List<PropControl>();
+        private readonly List<PropControl> _intPropControls = new();
+        private readonly List<PropControl> _stringPropControls = new();
+        private readonly List<PropControl> _enumPropControls = new();
 
         private Category _parent;
         public Category Category { get; set; }
@@ -25,7 +25,7 @@ namespace DataBaseManager.Presentation
             _parent = parent;
             foreach (var property in parent.IntProperties)
             {
-                PropControl propControl = new PropControl();
+                var propControl = new PropControl();
                 _intPropControls.Add(propControl);
                 propControl.textBox1.Text = property.Name;
                 propControl.textBox1.ReadOnly = true;
@@ -34,7 +34,7 @@ namespace DataBaseManager.Presentation
             }
             foreach (var property in parent.StringProperties)
             {
-                PropControl propControl = new PropControl();
+                var propControl = new PropControl();
                 _stringPropControls.Add(propControl);
                 propControl.textBox1.Text = property.Name;
                 propControl.textBox1.ReadOnly = true;
@@ -43,7 +43,7 @@ namespace DataBaseManager.Presentation
             }
             foreach (var property in parent.EnumProperties)
             {
-                PropControl propControl = new PropControl();
+                var propControl = new PropControl();
                 _enumPropControls.Add(propControl);
                 propControl.textBox1.Text = property.Name;
                 propControl.textBox1.ReadOnly = true;
@@ -76,15 +76,15 @@ namespace DataBaseManager.Presentation
 
         private void AddPropControl(PropControl propControl)
         {
-            this.Controls.Add(propControl);
+            Controls.Add(propControl);
             propControl.Top = 40 * _top;
             propControl.Left = 12;
             panel1.Top += 40;
             comboBox1.SelectedItem = null;
             button1.Enabled = false;
             _top++;
-            if (this.Height <= 40 * _top + 60)
-                this.Height += 40;
+            if (Height <= 40 * _top + 60)
+                Height += 40;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, System.EventArgs e)
