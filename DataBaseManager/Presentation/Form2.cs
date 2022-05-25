@@ -10,6 +10,10 @@ namespace DataBaseManager.Presentation
 {
     public partial class Form2 : Form
     {
+        private ToolStripMenuItem _addChildCategory;
+        private ToolStripMenuItem _addSiblingCategory;
+        private ToolStripMenuItem _removeCategory;
+        
         public Form2()
         {
             InitializeComponent();
@@ -18,13 +22,15 @@ namespace DataBaseManager.Presentation
             treeView1.MouseDown += treeView_MouseDown; ;
             treeView1.ItemHeight = 70;
             
-            ToolStripMenuItem item1 = new ToolStripMenuItem("Add child", null, null, "AddC");
-            ToolStripMenuItem item2 = new ToolStripMenuItem("Add sibling", null, null, "AddS");
-            ToolStripMenuItem item3 = new ToolStripMenuItem("Remove", null, null, "Remove");
-            item1.Click += item1_Click;
-            contextMenuStrip1.Items.Add(item1);
-            contextMenuStrip1.Items.Add(item2);
-            contextMenuStrip1.Items.Add(item3);
+            _addChildCategory = new ToolStripMenuItem("Add child", null, null, "AddC");
+            _addSiblingCategory = new ToolStripMenuItem("Add sibling", null, null, "AddS");
+            _removeCategory = new ToolStripMenuItem("Remove", null, null, "Remove");
+            _addChildCategory.Click += addChildCategory_Click;
+            _addSiblingCategory.Click += addSiblingCategory_Click;
+            _removeCategory.Click += removeCategory_Click;
+            contextMenuStrip1.Items.Add(_addChildCategory);
+            contextMenuStrip1.Items.Add(_addSiblingCategory);
+            contextMenuStrip1.Items.Add(_removeCategory);
             
             var viewData = new Controller();
             var rootCategory = viewData.GetRootCategory();
@@ -54,30 +60,45 @@ namespace DataBaseManager.Presentation
                 item.Enabled = category!=null;
             }
             if(category==null) return;
-            contextMenuStrip1.Items[0].Enabled = true;
-            if (category.Children.Any())
-                contextMenuStrip1.Items[2].Enabled = false;
+            if (category.Children!=null && category.Children.Any())
+                _removeCategory.Enabled = false;
             if (category.Id != 1) return;
-            contextMenuStrip1.Items[1].Enabled = false;
-            contextMenuStrip1.Items[2].Enabled = false;
+            _addSiblingCategory.Enabled = false;
+            _removeCategory.Enabled = false;
         }
-        
-        private void item1_Click(object sender, EventArgs e)
+
+        private void removeCategory_Click(object sender, EventArgs e)
         {
             var node = ((CategoryTreeNode) treeView1.SelectedNode);
-            var formAdd = new FormAdd(node.Category);
+            Controller.RemoveCategory(node.Category);
+            node.Remove();
+            treeView1.Refresh();
+        }
+        
+        private void addChildCategory_Click(object sender, EventArgs e)
+        {
+            var node = ((CategoryTreeNode) treeView1.SelectedNode);
+            AddCategory(node, node);
+        }
+        
+        private void addSiblingCategory_Click(object sender, EventArgs e)
+        {
+            var node = ((CategoryTreeNode) treeView1.SelectedNode);
+            AddCategory(node, (CategoryTreeNode) node.Parent);
+        }
+
+        private void AddCategory(CategoryTreeNode node, CategoryTreeNode parent)
+        {
+            var formAdd = new FormAdd(parent.Category);
             formAdd.Closed += (s, args) =>
             {
                 var added = ((FormAdd) s)?.Category;
                 if (added == null) return;
-                node.Nodes.Add(new CategoryTreeNode(added));
+                parent.Nodes.Add(new CategoryTreeNode(added));
                 treeView1.Refresh();
             };
             formAdd.Show();
         }
-        
-        
-        
 
         private void treeView_DrawNode(object sender, DrawTreeNodeEventArgs e) {
             // Draw the background and node text for a selected node.

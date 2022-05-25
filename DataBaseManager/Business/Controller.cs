@@ -21,6 +21,16 @@ namespace DataBaseManager.Business
                     .ThenInclude(x => x.Flags).ToArray();
             }
         }
+
+        public static void RemoveCategory(Category category)
+        {
+            using (var context = new Context())
+            {
+                context.Categories.Attach(category);
+                context.Categories.Remove(category);
+                context.SaveChanges();
+            }
+        }
         
         public static void AddCategory(Category category)
         {
