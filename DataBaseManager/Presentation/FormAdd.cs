@@ -16,14 +16,42 @@ namespace DataBaseManager.Presentation
         private Category _parent;
         public Category Category { get; set; }
         
+        private int _top = 1;
+
+        
         public FormAdd(Category parent)
         {
             InitializeComponent();
             _parent = parent;
+            foreach (var property in parent.IntProperties)
+            {
+                PropControl propControl = new PropControl();
+                _intPropControls.Add(propControl);
+                propControl.textBox1.Text = property.Name;
+                propControl.textBox1.ReadOnly = true;
+                propControl.textBox2.PlaceholderText = "Integer value";
+                AddPropControl(propControl);
+            }
+            foreach (var property in parent.StringProperties)
+            {
+                PropControl propControl = new PropControl();
+                _stringPropControls.Add(propControl);
+                propControl.textBox1.Text = property.Name;
+                propControl.textBox1.ReadOnly = true;
+                propControl.textBox2.PlaceholderText = "String value";
+                AddPropControl(propControl);
+            }
+            foreach (var property in parent.EnumProperties)
+            {
+                PropControl propControl = new PropControl();
+                _enumPropControls.Add(propControl);
+                propControl.textBox1.Text = property.Name;
+                propControl.textBox1.ReadOnly = true;
+                propControl.textBox2.PlaceholderText = "Enum value";
+                AddPropControl(propControl);
+            }
         }
-        
 
-        private int _top = 1;
         private void button1_Click(object sender, System.EventArgs e)
         {
             PropControl propControl = new PropControl();
@@ -43,6 +71,11 @@ namespace DataBaseManager.Presentation
                     break;
             }
 
+            AddPropControl(propControl);
+        }
+
+        private void AddPropControl(PropControl propControl)
+        {
             this.Controls.Add(propControl);
             propControl.Top = 40 * _top;
             propControl.Left = 12;
