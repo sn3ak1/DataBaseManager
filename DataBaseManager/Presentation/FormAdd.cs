@@ -12,6 +12,8 @@ namespace DataBaseManager.Presentation
         private readonly List<PropControl> _intPropControls = new();
         private readonly List<PropControl> _stringPropControls = new();
         private readonly List<PropControl> _enumPropControls = new();
+        
+        private readonly List<PropControl> _propertiesToRemove = new();
 
         private Category _parent;
         public Category Category { get; set; }
@@ -104,8 +106,17 @@ namespace DataBaseManager.Presentation
         private void button_remove_property_clicked(object sender, System.EventArgs e)
         {
             var propControl = (PropControl) ((Button) sender).Parent;
-            Controller.RemoveProperty(propControl.PropertyId, propControl.PropertyType, Category);
             Controls.Remove(propControl);
+            _top--;
+            panel1.Top -= 40;
+            Height -= 40;
+            foreach (var control in _intPropControls.Concat(_stringPropControls).Concat(_enumPropControls))
+            {
+                if (control.Id <= propControl.Id) continue;
+                control.Id--;
+                control.Top -= 40;
+            }
+            _propertiesToRemove.Add(propControl);
         }
 
         private void button1_Click(object sender, System.EventArgs e)
@@ -155,6 +166,24 @@ namespace DataBaseManager.Presentation
 
         private void button2_Click(object sender, System.EventArgs e)
         {
+            foreach (var propControl in _propertiesToRemove)
+            {
+                switch (propControl.PropertyType)
+                {
+                    case PropertyType.Int:
+                        _intPropControls.Remove(propControl);
+                        break;
+                    case PropertyType.String:
+                        _stringPropControls.Remove(propControl);
+                        break;
+                    case PropertyType.Enum:
+                        _enumPropControls.Remove(propControl);
+                        break;
+                }
+                if(propControl.PropertyId!=0)
+                    Controller.RemoveProperty(propControl.PropertyId, propControl.PropertyType, Category);
+            }
+            
             var id = Category?.Id ?? 0;
             Category ??= new Category()
             {

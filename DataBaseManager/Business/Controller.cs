@@ -69,8 +69,6 @@ namespace DataBaseManager.Business
                             child.IntProperties.First(x => x.ParentId == propertyId).ParentId = 0;
                         }
                         context.IntProperties.Remove(p1);
-                        category.IntProperties = category.IntProperties
-                            .Where(x => x.Id != p1.Id).ToArray();
                         break;
                     case PropertyType.String:
                         var p2 = context.StringProperties.First(x => x.Id == propertyId);
@@ -81,8 +79,6 @@ namespace DataBaseManager.Business
                             child.StringProperties.First(x => x.ParentId == propertyId).ParentId = 0;
                         }
                         context.StringProperties.Remove(p2);
-                        category.StringProperties = category.StringProperties
-                            .Where(x => x.Id != p2.Id).ToArray();
                         break;
                     case PropertyType.Enum:
                         var p3 = context.EnumProperties.First(x => x.Id == propertyId);
@@ -93,8 +89,6 @@ namespace DataBaseManager.Business
                             child.EnumProperties.First(x => x.ParentId == propertyId).ParentId = 0;
                         }
                         context.EnumProperties.Remove(p3);
-                        category.EnumProperties = category.EnumProperties
-                            .Where(x => x.Id != p3.Id).ToArray();
                         break;
                 }
         
