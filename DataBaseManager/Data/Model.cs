@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataBaseManager.Data
 {
@@ -6,6 +7,8 @@ namespace DataBaseManager.Data
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [ForeignKey("ParentId")]
+        public int ParentId { get; set; }
     }
 
     public class IntProperty: Property

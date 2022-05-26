@@ -18,38 +18,75 @@ namespace DataBaseManager.Presentation
         
         private int _top = 1;
 
-        
-        public FormAdd(Category parent)
+        public FormAdd(Category parent, Category edited = null)
         {
             InitializeComponent();
             _parent = parent;
-            foreach (var property in parent.IntProperties)
+            Category = edited;
+            if (edited != null)
+                textBox1.Text = edited.Name;
+
+            if(parent!=null&&edited==null)
             {
-                var propControl = new PropControl();
-                _intPropControls.Add(propControl);
-                propControl.textBox1.Text = property.Name;
-                propControl.textBox1.ReadOnly = true;
-                propControl.textBox2.PlaceholderText = "Integer value";
-                AddPropControl(propControl);
+                foreach (var property in parent.IntProperties)
+                {
+                    CreateAndAddPropControl(property, _intPropControls, "Integer",true);
+                }
+
+                foreach (var property in parent.StringProperties)
+                {
+                    CreateAndAddPropControl(property, _stringPropControls, "String",true);
+                }
+
+                foreach (var property in parent.EnumProperties)
+                {
+                    CreateAndAddPropControl(property, _enumPropControls, "Enum",true);
+                }
             }
-            foreach (var property in parent.StringProperties)
+
+            if (edited == null) return;
+            foreach (var property in edited.IntProperties)
             {
-                var propControl = new PropControl();
-                _stringPropControls.Add(propControl);
-                propControl.textBox1.Text = property.Name;
-                propControl.textBox1.ReadOnly = true;
-                propControl.textBox2.PlaceholderText = "String value";
-                AddPropControl(propControl);
+                CreateAndAddPropControl(property, _intPropControls, "Integer");
             }
-            foreach (var property in parent.EnumProperties)
+            
+            foreach (var property in edited.StringProperties)
             {
-                var propControl = new PropControl();
-                _enumPropControls.Add(propControl);
-                propControl.textBox1.Text = property.Name;
-                propControl.textBox1.ReadOnly = true;
-                propControl.textBox2.PlaceholderText = "Enum value";
-                AddPropControl(propControl);
+                CreateAndAddPropControl(property, _stringPropControls, "String");
             }
+            
+            foreach (var property in edited.EnumProperties)
+            {
+                CreateAndAddPropControl(property, _enumPropControls, "Enum");
+            }
+        }
+
+        private void CreateAndAddPropControl(Property property, ICollection<PropControl> propControls, 
+            string placeholder, bool fromParent=false)
+        {
+            var propControl = new PropControl()
+            {
+                PropertyId = fromParent? 0: property.Id,
+                ParentPropertyId = fromParent? property.Id: property.ParentId
+            };
+            propControls.Add(propControl);
+            propControl.textBox1.Text = property.Name;
+            propControl.textBox2.PlaceholderText = placeholder+" value";
+            propControl.textBox1.ReadOnly = fromParent || property.ParentId!=0;
+            if(!fromParent)
+            {
+                propControl.textBox2.Text = placeholder switch
+                {
+                    "Integer" => Category.IntProperties.First(x
+                        => x.Id == property.Id).Value.ToString(),
+                    "String" => Category.StringProperties.First(x
+                        => x.Id == property.Id).Value.ToString(),
+                    "Enum" => Category.EnumProperties.First(x
+                        => x.Id == property.Id).Value.ToString(),
+                    _ => null
+                };
+            }
+            AddPropControl(propControl);
         }
 
         private void button1_Click(object sender, System.EventArgs e)
@@ -76,6 +113,7 @@ namespace DataBaseManager.Presentation
 
         private void AddPropControl(PropControl propControl)
         {
+            
             Controls.Add(propControl);
             propControl.Top = 40 * _top;
             propControl.Left = 12;
@@ -94,18 +132,27 @@ namespace DataBaseManager.Presentation
 
         private void button2_Click(object sender, System.EventArgs e)
         {
-            Category = new Category()
+            var id = Category?.Id ?? 0;
+            Category ??= new Category()
             {
+                Id = id,
                 Parent = _parent,
-                Name = textBox1.Text,
-                IntProperties = _intPropControls.Select(x => 
-                    new IntProperty(){Name = x.textBox1.Text, Value = Int32.Parse(x.textBox2.Text)}).ToArray(),
-                StringProperties = _stringPropControls.Select(x => 
-                    new StringProperty(){Name = x.textBox1.Text, Value = x.textBox2.Text}).ToArray(),
-                EnumProperties = _enumPropControls.Select(x => 
-                    new EnumProperty(){Name = x.textBox1.Text,Value = x.textBox2.Text}).ToArray()
-            };
-            Controller.AddCategory(Category);
+                Name = textBox1.Text
+            }; 
+            Category.Name = textBox1.Text;
+            Category.IntProperties = _intPropControls.Select(x => new IntProperty
+                {Id = x.PropertyId,Name = x.textBox1.Text, Value = int.Parse(x.textBox2.Text), ParentId = x.ParentPropertyId})
+                .ToArray();
+            Category.StringProperties = _stringPropControls.Select(x => new StringProperty
+                {Id = x.PropertyId,Name = x.textBox1.Text, Value = x.textBox2.Text, ParentId = x.ParentPropertyId})
+                .ToArray();
+            Category.EnumProperties = _enumPropControls.Select(x => new EnumProperty
+                {Id = x.PropertyId,Name = x.textBox1.Text, Value = x.textBox2.Text, ParentId = x.ParentPropertyId})
+                .ToArray();
+            if(id!=0)
+                Controller.EditCategory(Category);
+            else
+                Controller.AddCategory(Category);
             Close();
         }
     }

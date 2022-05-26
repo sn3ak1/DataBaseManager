@@ -13,6 +13,7 @@ namespace DataBaseManager.Presentation
         private readonly ToolStripMenuItem _addChildCategory;
         private readonly ToolStripMenuItem _addSiblingCategory;
         private readonly ToolStripMenuItem _removeCategory;
+        private readonly ToolStripMenuItem _editCategory;
         
         public Form2()
         {
@@ -21,13 +22,16 @@ namespace DataBaseManager.Presentation
             treeView1.DrawNode += treeView_DrawNode; ;
             treeView1.MouseDown += treeView_MouseDown; ;
             treeView1.ItemHeight = 70;
-            
+
+            _editCategory = new ToolStripMenuItem("Edit");
             _addChildCategory = new ToolStripMenuItem("Add child", null, null, "AddC");
             _addSiblingCategory = new ToolStripMenuItem("Add sibling", null, null, "AddS");
             _removeCategory = new ToolStripMenuItem("Remove", null, null, "Remove");
+            _editCategory.Click += editCategory_click;
             _addChildCategory.Click += addChildCategory_Click;
             _addSiblingCategory.Click += addSiblingCategory_Click;
             _removeCategory.Click += removeCategory_Click;
+            contextMenuStrip1.Items.Add(_editCategory);
             contextMenuStrip1.Items.Add(_addChildCategory);
             contextMenuStrip1.Items.Add(_addSiblingCategory);
             contextMenuStrip1.Items.Add(_removeCategory);
@@ -41,7 +45,7 @@ namespace DataBaseManager.Presentation
             treeView1.ExpandAll();
             
         }
-        
+
         private static void AddChildrenToTree(Category category, CategoryTreeNode node)
         {
             node.Nodes.AddRange(category.Children.Select(x => new CategoryTreeNode(x)).ToArray());
@@ -51,7 +55,6 @@ namespace DataBaseManager.Presentation
             }
         }
         
-
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var category = ((CategoryTreeNode) treeView1.SelectedNode).Category;
@@ -64,6 +67,19 @@ namespace DataBaseManager.Presentation
             _removeCategory.Enabled = false;
         }
 
+        private void editCategory_click(object sender, EventArgs e)
+        {
+            var node = ((CategoryTreeNode) treeView1.SelectedNode);
+            var formAdd = new FormAdd(node.Category.Parent,node.Category);
+            formAdd.Closed += (s, args) =>
+            {
+                var edited = ((FormAdd) s)?.Category;
+                node.Text = Controller.getCategoryString(edited);
+                treeView1.Refresh();
+            };
+            formAdd.Show();
+        }
+        
         private void removeCategory_Click(object sender, EventArgs e)
         {
             var node = ((CategoryTreeNode) treeView1.SelectedNode);

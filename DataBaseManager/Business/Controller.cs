@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using DataBaseManager.Data;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,15 @@ namespace DataBaseManager.Business
                 context.SaveChanges();
             }
         }
+        public static void EditCategory(Category category)
+        {
+            using (var context = new Context())
+            {
+                context.Update(category);
+                context.SaveChanges();
+            }
+        }
+        
         
         public static string PrintData()
         {
@@ -120,5 +130,7 @@ namespace DataBaseManager.Business
         {
             return _categories.First(x => x.Id == 1);
         }
+
+        
     }
 }
