@@ -73,20 +73,39 @@ namespace DataBaseManager.Presentation
             propControl.textBox1.Text = property.Name;
             propControl.textBox2.PlaceholderText = placeholder+" value";
             propControl.textBox1.ReadOnly = fromParent || property.ParentId!=0;
+            propControl.button1.Enabled = !(fromParent || property.ParentId != 0);
             if(!fromParent)
             {
-                propControl.textBox2.Text = placeholder switch
+                switch (placeholder)
                 {
-                    "Integer" => Category.IntProperties.First(x
-                        => x.Id == property.Id).Value.ToString(),
-                    "String" => Category.StringProperties.First(x
-                        => x.Id == property.Id).Value.ToString(),
-                    "Enum" => Category.EnumProperties.First(x
-                        => x.Id == property.Id).Value.ToString(),
-                    _ => null
-                };
+                    case "Integer":
+                        propControl.PropertyType = PropertyType.Int;
+                        propControl.textBox2.Text =
+                            Category.IntProperties.First(x => x.Id == property.Id).Value.ToString();
+                        break;
+                    case "String":
+                        propControl.PropertyType = PropertyType.String;
+                        propControl.textBox2.Text =
+                            Category.StringProperties.First(x => x.Id == property.Id).Value.ToString();
+                        break;
+                    case "Enum":
+                        propControl.PropertyType = PropertyType.Enum;
+                        propControl.textBox2.Text =
+                            Category.EnumProperties.First(x => x.Id == property.Id).Value.ToString();
+                        break;
+                    default:
+                        propControl.textBox2.Text = null;
+                        break;
+                }
             }
             AddPropControl(propControl);
+        }
+
+        private void button_remove_property_clicked(object sender, System.EventArgs e)
+        {
+            var propControl = (PropControl) ((Button) sender).Parent;
+            Controller.RemoveProperty(propControl.PropertyId, propControl.PropertyType, Category);
+            Controls.Remove(propControl);
         }
 
         private void button1_Click(object sender, System.EventArgs e)
@@ -95,14 +114,17 @@ namespace DataBaseManager.Presentation
             switch (comboBox1.SelectedItem.ToString())
             {
                 case "Integer":
+                    propControl.PropertyType = PropertyType.Int;
                     _intPropControls.Add(propControl);
                     propControl.textBox2.PlaceholderText = "Integer value";
                     break;
                 case "String":
+                    propControl.PropertyType = PropertyType.String;
                     _stringPropControls.Add(propControl);
                     propControl.textBox2.PlaceholderText = "String value";
                     break;
                 case "Enum":
+                    propControl.PropertyType = PropertyType.Enum;
                     _enumPropControls.Add(propControl);
                     propControl.textBox2.PlaceholderText = "Enum value";
                     break;
@@ -113,9 +135,10 @@ namespace DataBaseManager.Presentation
 
         private void AddPropControl(PropControl propControl)
         {
-            
             Controls.Add(propControl);
-            propControl.Top = 40 * _top;
+            propControl.Id = _top;
+            propControl.button1.Click += button_remove_property_clicked;
+            propControl.Top = 40 * _top + 10;
             propControl.Left = 12;
             panel1.Top += 40;
             comboBox1.SelectedItem = null;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataBaseManager.Data
@@ -43,5 +44,12 @@ namespace DataBaseManager.Data
         public IEnumerable<IntProperty> IntProperties { get; set; }
         public IEnumerable<StringProperty> StringProperties { get; set; }
         public IEnumerable<EnumProperty> EnumProperties { get; set; }
+    }
+
+    public enum PropertyType
+    {
+        Int,
+        String,
+        Enum
     }
 }
