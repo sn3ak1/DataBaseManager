@@ -9,6 +9,8 @@ namespace DataBaseManager.Data
         public string Name { get; set; }
         [ForeignKey("ParentId")]
         public int ParentId { get; set; }
+        
+        public Category Category { get; set; }
     }
 
     public class IntProperty: Property

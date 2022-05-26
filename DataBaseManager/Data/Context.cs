@@ -23,23 +23,28 @@ namespace DataBaseManager.Data
             modelBuilder.Entity<Category>()
                 .HasMany<Category>(c => c.Children)
                 .WithOne(e => e.Parent)
-                .OnDelete(DeleteBehavior.Cascade );
-
-            // modelBuilder.Entity<IntProperty>()
-            //     .ToTable("IntProperties")
-            //     .HasKey(x => x.Id);
-            //
-            // modelBuilder.Entity<StringProperty>()
-            //     .ToTable("StringProperties")
-            //     .HasKey(x => x.Id);
-            //
-            // modelBuilder.Entity<EnumProperty>()
-            //     .ToTable("EnumProperties")
-            //     .HasKey(x => x.Id);
-            //
-            // modelBuilder.Entity<EnumFlag>()
-            //     .ToTable("EnumFlags")
-            //     .HasKey(x => x.Id);
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity
+                    .HasMany(c => c.Children)
+                    .WithOne(e => e.Parent)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity
+                    .HasMany(e => e.IntProperties)
+                    .WithOne(x => x.Category)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity
+                    .HasMany(e => e.StringProperties)
+                    .WithOne(x => x.Category)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity
+                    .HasMany(e => e.EnumProperties)
+                    .WithOne(x => x.Category)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
         
     }
