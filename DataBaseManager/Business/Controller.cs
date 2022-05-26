@@ -62,18 +62,36 @@ namespace DataBaseManager.Business
                 {
                     case PropertyType.Int:
                         var p1 = context.IntProperties.First(x => x.Id == propertyId);
+                        context.IntProperties.Where(x => x.ParentId == propertyId)
+                            .ForEachAsync(x => x.ParentId = 0);
+                        foreach (var child in category.Children)
+                        {
+                            child.IntProperties.First(x => x.ParentId == propertyId).ParentId = 0;
+                        }
                         context.IntProperties.Remove(p1);
                         category.IntProperties = category.IntProperties
                             .Where(x => x.Id != p1.Id).ToArray();
                         break;
                     case PropertyType.String:
                         var p2 = context.StringProperties.First(x => x.Id == propertyId);
+                        context.StringProperties.Where(x => x.ParentId == propertyId)
+                            .ForEachAsync(x => x.ParentId = 0);
+                        foreach (var child in category.Children)
+                        {
+                            child.StringProperties.First(x => x.ParentId == propertyId).ParentId = 0;
+                        }
                         context.StringProperties.Remove(p2);
                         category.StringProperties = category.StringProperties
                             .Where(x => x.Id != p2.Id).ToArray();
                         break;
                     case PropertyType.Enum:
                         var p3 = context.EnumProperties.First(x => x.Id == propertyId);
+                        context.EnumProperties.Where(x => x.ParentId == propertyId)
+                            .ForEachAsync(x => x.ParentId = 0);
+                        foreach (var child in category.Children)
+                        {
+                            child.EnumProperties.First(x => x.ParentId == propertyId).ParentId = 0;
+                        }
                         context.EnumProperties.Remove(p3);
                         category.EnumProperties = category.EnumProperties
                             .Where(x => x.Id != p3.Id).ToArray();
@@ -83,37 +101,6 @@ namespace DataBaseManager.Business
                 context.SaveChanges();
             }
         }
-        //
-        // public static void RemoveIntProperty(Property property)
-        // {
-        //     using (var context = new Context())
-        //     {
-        //         context.Attach(property);
-        //         context.IntProperties.Remove((IntProperty) property);
-        //         context.SaveChanges();
-        //     }
-        // }
-        //
-        // public static void RemoveStringProperty(Property property)
-        // {
-        //     using (var context = new Context())
-        //     {
-        //         context.Attach(property);
-        //         context.StringProperties.Remove((StringProperty) property);
-        //         context.SaveChanges();
-        //     }
-        // }
-        //
-        // public static void RemoveEnumProperty(Property property)
-        // {
-        //     using (var context = new Context())
-        //     {
-        //         context.Attach(property);
-        //         context.EnumProperties.Remove((EnumProperty) property);
-        //         context.SaveChanges();
-        //     }
-        // }
-        
         
         public static string PrintData()
         {
