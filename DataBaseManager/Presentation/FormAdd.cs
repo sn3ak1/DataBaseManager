@@ -74,8 +74,8 @@ namespace DataBaseManager.Presentation
             propControls.Add(propControl);
             propControl.textBox1.Text = property.Name;
             propControl.textBox2.PlaceholderText = placeholder+" value";
-            propControl.textBox1.ReadOnly = fromParent || property.ParentId!=0;
-            propControl.button1.Enabled = !(fromParent || property.ParentId != 0);
+            // propControl.textBox1.ReadOnly = fromParent || property.ParentId!=0;
+            // propControl.button1.Enabled = !(fromParent || property.ParentId != 0);
             if(!fromParent)
             {
                 switch (placeholder)

@@ -66,7 +66,9 @@ namespace DataBaseManager.Business
                             .ForEachAsync(x => x.ParentId = 0);
                         foreach (var child in category.Children)
                         {
-                            child.IntProperties.First(x => x.ParentId == propertyId).ParentId = 0;
+                            var p = child.IntProperties.FirstOrDefault(x => x.ParentId == propertyId);
+                            if(p!=null)
+                                p.ParentId = 0;
                         }
                         context.IntProperties.Remove(p1);
                         break;
@@ -76,8 +78,9 @@ namespace DataBaseManager.Business
                             .ForEachAsync(x => x.ParentId = 0);
                         foreach (var child in category.Children)
                         {
-                            child.StringProperties.First(x => x.ParentId == propertyId).ParentId = 0;
-                        }
+                            var p = child.StringProperties.FirstOrDefault(x => x.ParentId == propertyId);
+                            if(p!=null)
+                                p.ParentId = 0;                        }
                         context.StringProperties.Remove(p2);
                         break;
                     case PropertyType.Enum:
@@ -86,8 +89,9 @@ namespace DataBaseManager.Business
                             .ForEachAsync(x => x.ParentId = 0);
                         foreach (var child in category.Children)
                         {
-                            child.EnumProperties.First(x => x.ParentId == propertyId).ParentId = 0;
-                        }
+                            var p = child.EnumProperties.FirstOrDefault(x => x.ParentId == propertyId);
+                            if(p!=null)
+                                p.ParentId = 0;                        }
                         context.EnumProperties.Remove(p3);
                         break;
                 }
