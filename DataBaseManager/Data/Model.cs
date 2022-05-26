@@ -4,6 +4,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataBaseManager.Data
 {
+
+    public class Permission
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool Admin { get; set; }
+        public bool CanAddCategories { get; set; }
+        public ICollection<Category> ModifiableCategories { get; set; }
+    }
+    
+    public class Role
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public ICollection<User> Users { get; set; }
+        public ICollection<Permission> Permissions { get; set; }
+    }
+    
+    public class User
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string PasswdHash {get; set; }
+        public Role Role { get; set; }
+    }
+    
     public class Property
     {
         public int Id { get; set; }

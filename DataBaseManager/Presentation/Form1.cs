@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using DataBaseManager.Business;
 
 namespace DataBaseManager.Presentation
 {
@@ -12,23 +13,27 @@ namespace DataBaseManager.Presentation
         
         private void button1_Click(object sender, EventArgs e)
         {
-            FormView formView = new FormView();
-            formView.FormClosed += (s, args) => this.Show();
+            var form = new FormLogin();
+            form.FormClosed += (s, args) =>
+            {
+                this.Show();
+                label2.Text = UserController.LoggedAs.Name==null ? "guest" : UserController.LoggedAs.Name;
+            };
             this.Hide();
-            formView.Show();
+            form.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FormAdd formAdd = new FormAdd(null);
-            formAdd.FormClosed += (s, args) => this.Show();
+            var form = new FormAdd(null);
+            form.FormClosed += (s, args) => this.Show();
             this.Hide();
-            formAdd.Show();
+            form.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form2 form = new Form2();
+            var form = new Form2();
             form.FormClosed += (s, args) => this.Show();
             this.Hide();
             form.Show();
