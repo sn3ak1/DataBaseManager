@@ -48,11 +48,12 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(153, 193);
+            this.button2.Enabled = false;
+            this.button2.Location = new System.Drawing.Point(119, 174);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(45, 28);
+            this.button2.Size = new System.Drawing.Size(104, 47);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Add to database";
+            this.button2.Text = "Admin panel";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 

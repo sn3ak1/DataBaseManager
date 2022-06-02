@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using DataBaseManager.Business;
 
@@ -17,7 +18,16 @@ namespace DataBaseManager.Presentation
             form.FormClosed += (s, args) =>
             {
                 this.Show();
-                label2.Text = UserController.LoggedAs.Name==null ? "guest" : UserController.LoggedAs.Name;
+                button2.Enabled = false;
+                if (UserController.LoggedAs.Name == null)
+                    label2.Text = "guest";
+                else
+                {
+                    label2.Text = UserController.LoggedAs.Name;
+                    if (UserController.LoggedAs.Role.Permissions.Any(x => x.Admin))
+                        button2.Enabled = true;
+                }
+
             };
             this.Hide();
             form.Show();
@@ -25,7 +35,7 @@ namespace DataBaseManager.Presentation
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var form = new FormAdd(null);
+            var form = new FormAdminPanel();
             form.FormClosed += (s, args) => this.Show();
             this.Hide();
             form.Show();

@@ -36,8 +36,7 @@ namespace DataBaseManager.Presentation
             contextMenuStrip1.Items.Add(_addSiblingCategory);
             contextMenuStrip1.Items.Add(_removeCategory);
             
-            var viewData = new Controller();
-            var rootCategory = viewData.GetRootCategory();
+            var rootCategory = Controller.GetRootCategory();
             treeView1.Nodes.Add(new CategoryTreeNode(rootCategory));
             
             AddChildrenToTree(rootCategory, (CategoryTreeNode) treeView1.Nodes[0]);
@@ -73,9 +72,15 @@ namespace DataBaseManager.Presentation
             }
             
             if (UserController.LoggedAs.Role.Permissions.Any(x => 
-                    x.ModifiableCategories.Any(cat=>cat.Id == category.Id)))
+                    x.ModifiableCategories.Any<Category>(cat=>cat.Id == category.Id)))
             {
                 _editCategory.Enabled = true;
+                _removeCategory.Enabled = true;
+            }
+            else
+            {
+                _editCategory.Enabled = false;
+                _removeCategory.Enabled = false;
             }
             
             if(category is not {Id: 1}) return;

@@ -10,7 +10,7 @@ namespace DataBaseManager.Business
     public static class UserController
     {
         public static User LoggedAs { get; set; }
-        
+
         public static bool AddUser(string name, string password)
         {
             using var context = new Context();
@@ -36,13 +36,85 @@ namespace DataBaseManager.Business
             return verified;
         }
 
-        public static IEnumerable<Role> GetRoles()
+        public static void DeleteUser(User user)
+        {
+            using (var context = new Context())
+            {
+                context.Users.Attach(user);
+                context.Users.Remove(user);
+                context.SaveChanges();
+            }
+        }
+        
+        public static void EditUser(User user)
+        {
+            using (var context = new Context())
+            {
+                context.Users.Update(user);
+                context.SaveChanges();
+            }
+        }
+        
+        public static void AddPermission(Permission permission)
+        {
+            using var context = new Context();
+            context.Database.EnsureCreated();
+            context.Permissions.Add(permission);
+            context.SaveChanges();
+        }
+        
+        public static void DeletePermission(Permission permission)
+        {
+            using (var context = new Context())
+            {
+                context.Permissions.Attach(permission);
+                context.Permissions.Remove(permission);
+                context.SaveChanges();
+            }
+        }
+        
+        public static void AddRole(Role role)
+        {
+            using var context = new Context();
+            context.Database.EnsureCreated();
+            context.Roles.Add(role);
+            context.SaveChanges();
+        }
+        
+        public static void DeleteRole(Role role)
+        {
+            using (var context = new Context())
+            {
+                context.Roles.Attach(role);
+                context.Roles.Remove(role);
+                context.SaveChanges();
+            }
+        }
+
+        public static Permission[] GetPermissions()
+        {
+            using var context = new Context();
+            return context.Permissions
+                .Include(x => x.ModifiableCategories).ToArray();
+        }
+        
+        public static User[] GetUsers()
+        {
+            using var context = new Context();
+            return context.Users
+                .Include(x=>x.Role)
+                .ThenInclude(x=>x.Permissions)
+                .ThenInclude(x=>x.ModifiableCategories)
+                .ToArray();
+        }
+
+        public static Role[] GetRoles()
         {
             using var context = new Context();
             return context.Roles
                 .Include(x => x.Users)
                 .Include(x => x.Permissions)
-                .ThenInclude(x => x.ModifiableCategories);
+                .ThenInclude(x => x.ModifiableCategories).ToArray();
         }
 
         public static string Encrypt(string password)

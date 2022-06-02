@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Windows.Forms;
 
 namespace DataBaseManager.Data
 {
@@ -12,6 +13,11 @@ namespace DataBaseManager.Data
         public bool Admin { get; set; }
         public bool CanAddCategories { get; set; }
         public ICollection<Category> ModifiableCategories { get; set; }
+        
+        public override string ToString()
+        {
+            return Name;
+        }
     }
     
     public class Role
@@ -20,6 +26,11 @@ namespace DataBaseManager.Data
         public string Name { get; set; }
         public ICollection<User> Users { get; set; }
         public ICollection<Permission> Permissions { get; set; }
+        
+        public override string ToString()
+        {
+            return Name;
+        }
     }
     
     public class User
@@ -28,6 +39,11 @@ namespace DataBaseManager.Data
         public string Name { get; set; }
         public string PasswdHash {get; set; }
         public Role Role { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
     
     public class Property
@@ -70,6 +86,11 @@ namespace DataBaseManager.Data
         public IEnumerable<IntProperty> IntProperties { get; set; }
         public IEnumerable<StringProperty> StringProperties { get; set; }
         public IEnumerable<EnumProperty> EnumProperties { get; set; }
+        
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public enum PropertyType

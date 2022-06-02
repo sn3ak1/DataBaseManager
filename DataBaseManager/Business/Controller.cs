@@ -6,15 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBaseManager.Business
 {
-    public class Controller
+    public static class Controller
     {
-        private Category[] _categories;
-        
-        public Controller()
+        public static Category[] GetCategories()
         {
             using (var context = new Context())
             {
-                _categories = context.Categories
+                return context.Categories
                     .Include(x => x.Children)
                     .Include(x => x.IntProperties)
                     .Include(x => x.StringProperties)
@@ -171,9 +169,9 @@ namespace DataBaseManager.Business
             return data.ToString();
         }
 
-        public Category GetRootCategory()
+        public static Category GetRootCategory()
         {
-            return _categories.First(x => x.Id == 1);
+            return GetCategories().First(x => x.Id == 1);
         }
 
         
