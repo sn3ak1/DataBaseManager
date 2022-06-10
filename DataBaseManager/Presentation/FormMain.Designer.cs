@@ -1,7 +1,7 @@
 ﻿
 namespace DataBaseManager.Presentation
 {
-    partial class Form2
+    partial class FormMain
     {
         /// <summary>
         /// Required designer variable.

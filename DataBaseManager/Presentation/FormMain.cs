@@ -8,14 +8,14 @@ using DataBaseManager.Data;
 
 namespace DataBaseManager.Presentation
 {
-    public partial class Form2 : Form
+    public partial class FormMain : Form
     {
         private readonly ToolStripMenuItem _addChildCategory;
         private readonly ToolStripMenuItem _addSiblingCategory;
         private readonly ToolStripMenuItem _removeCategory;
         private readonly ToolStripMenuItem _editCategory;
         
-        public Form2()
+        public FormMain()
         {
             InitializeComponent();
             treeView1.DrawMode = TreeViewDrawMode.OwnerDrawText;
