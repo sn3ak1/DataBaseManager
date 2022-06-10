@@ -15,7 +15,7 @@ namespace DataBaseManager.Presentation
         {
             InitializeComponent();
             checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
-            checkedListBox1.Items.AddRange(Controller.GetCategories());
+            checkedListBox1.Items.AddRange(Controller.GetCategoriesBasic());
         }
 
         private void button1_Click(object sender, System.EventArgs e)

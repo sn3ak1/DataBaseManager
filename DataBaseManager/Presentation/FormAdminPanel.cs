@@ -34,7 +34,7 @@ namespace DataBaseManager.Presentation
         private void button4_Click(object sender, EventArgs e)
         {
             string name = Prompt.ShowDialog("Role name:", "Add role");
-            var role = new Role() {Name = name};
+            var role = new Role() {Name = name, Users = new List<User>(), Permissions = new List<Permission>()};
             comboBox2.Items.Add(role);
             UserController.AddRole(role);
         }
@@ -80,7 +80,10 @@ namespace DataBaseManager.Presentation
         {
             var role = (Role) comboBox2.SelectedItem;
             if(((User) comboBox1.SelectedItem)!=null)
+            {
                 ((User) comboBox1.SelectedItem).Role = role;
+                ((Role) comboBox2.SelectedItem).Users.Add(((User) comboBox1.SelectedItem));
+            }
             listBox1.Items.Clear();
             if (role.Permissions == null) return;
             foreach (var permission in role.Permissions)

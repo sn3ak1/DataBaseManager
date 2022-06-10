@@ -21,6 +21,14 @@ namespace DataBaseManager.Business
             }
         }
 
+        public static Category[] GetCategoriesBasic()
+        {
+            using (var context = new Context())
+            {
+                return context.Categories.AsNoTracking().ToArray();
+            }
+        }
+
         public static void RemoveCategory(Category category)
         {
             using (var context = new Context())
