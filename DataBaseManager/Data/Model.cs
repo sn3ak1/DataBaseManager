@@ -12,7 +12,7 @@ namespace DataBaseManager.Data
         public string Name { get; set; }
         public bool Admin { get; set; }
         public bool CanAddCategories { get; set; }
-        public ICollection<Category> ModifiableCategories { get; set; }
+        public Category ModifiableCategory { get; set; }
         
         public override string ToString()
         {

@@ -19,7 +19,7 @@ namespace DataBaseManager.Presentation
             {
                 this.Show();
                 button2.Enabled = false;
-                if (UserController.LoggedAs.Name == null)
+                if (UserController.LoggedAs == null)
                     label2.Text = "guest";
                 else
                 {

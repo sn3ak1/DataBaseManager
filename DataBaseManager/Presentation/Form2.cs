@@ -72,7 +72,7 @@ namespace DataBaseManager.Presentation
             }
             
             if (UserController.LoggedAs.Role.Permissions.Any(x => 
-                    x.ModifiableCategories.Any<Category>(cat=>cat.Id == category.Id)))
+                    x.ModifiableCategory?.Id == category.Id))
             {
                 _editCategory.Enabled = true;
                 _removeCategory.Enabled = true;

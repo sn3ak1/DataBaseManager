@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace DataBaseManager.Presentation
 {
@@ -129,6 +130,7 @@ namespace DataBaseManager.Presentation
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(150, 23);
             this.comboBox1.TabIndex = 18;
+            this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // comboBox2
@@ -138,6 +140,7 @@ namespace DataBaseManager.Presentation
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(150, 23);
             this.comboBox2.TabIndex = 19;
+            this.comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // listBox1

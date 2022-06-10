@@ -16,7 +16,12 @@ namespace DataBaseManager.Business
             using var context = new Context();
             context.Database.EnsureCreated();
             if (context.Users.FirstOrDefault(x => x.Name == name) != null) return false;
-            context.Users.Add(new User(){Name = name, PasswdHash = Encrypt(password)});
+            var role = context.Roles.FirstOrDefault(x => x.Name == "user");
+            if (role == null){
+                role = new Role() {Name = "user"};
+                context.Roles.Add(role);
+            }
+            context.Users.Add(new User(){Name = name, PasswdHash = Encrypt(password), Role = role});
             context.SaveChanges();
             return true;
         }
@@ -27,7 +32,7 @@ namespace DataBaseManager.Business
             var user = context.Users
                 .Include(x=>x.Role)
                 .ThenInclude(x=>x.Permissions)
-                .ThenInclude(x=>x.ModifiableCategories)
+                .ThenInclude(x=>x.ModifiableCategory)
                 .FirstOrDefault(x=>x.Name == name);
             if (user == null) return false;
             var verified = CheckHash(password, user?.PasswdHash);
@@ -51,6 +56,15 @@ namespace DataBaseManager.Business
             using (var context = new Context())
             {
                 context.Users.Update(user);
+                context.SaveChanges();
+            }
+        }
+        
+        public static void EditRole(Role role)
+        {
+            using (var context = new Context())
+            {
+                context.Roles.Update(role);
                 context.SaveChanges();
             }
         }
@@ -95,7 +109,7 @@ namespace DataBaseManager.Business
         {
             using var context = new Context();
             return context.Permissions
-                .Include(x => x.ModifiableCategories).ToArray();
+            .Include(x => x.ModifiableCategory).ToArray();
         }
         
         public static User[] GetUsers()
@@ -104,7 +118,7 @@ namespace DataBaseManager.Business
             return context.Users
                 .Include(x=>x.Role)
                 .ThenInclude(x=>x.Permissions)
-                .ThenInclude(x=>x.ModifiableCategories)
+                .ThenInclude(x=>x.ModifiableCategory)
                 .ToArray();
         }
 
@@ -114,7 +128,7 @@ namespace DataBaseManager.Business
             return context.Roles
                 .Include(x => x.Users)
                 .Include(x => x.Permissions)
-                .ThenInclude(x => x.ModifiableCategories).ToArray();
+                .ThenInclude(x => x.ModifiableCategory).ToArray();
         }
 
         public static string Encrypt(string password)

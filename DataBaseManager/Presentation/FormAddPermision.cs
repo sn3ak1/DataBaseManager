@@ -14,26 +14,26 @@ namespace DataBaseManager.Presentation
         public FormAddPermision()
         {
             InitializeComponent();
+            checkedListBox1.ItemCheck += checkedListBox1_ItemCheck;
             checkedListBox1.Items.AddRange(Controller.GetCategories());
         }
 
         private void button1_Click(object sender, System.EventArgs e)
         {
-            List<Category> categories = new();
-            foreach (var item in checkedListBox1.CheckedItems)
-            {
-                categories.Add((Category) item);
-            }
-
             Permission = new Permission()
             {
                 Name = textBox1.Text,
                 Admin = checkBox1.Checked,
                 CanAddCategories = checkBox2.Checked,
-                ModifiableCategories = categories
+                ModifiableCategory = (Category) checkedListBox1.SelectedItem
             };
             
             Close();
+        }
+        
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e) {
+            for (int ix = 0; ix < checkedListBox1.Items.Count; ++ix)
+                if (ix != e.Index) checkedListBox1.SetItemChecked(ix, false);
         }
     }
 }
