@@ -57,22 +57,25 @@ namespace DataBaseManager.Presentation
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var category = ((CategoryTreeNode) treeView1.SelectedNode).Category;
-            if(UserController.LoggedAs==null || UserController.LoggedAs.Role==null 
-                                             || UserController.LoggedAs.Role.Permissions==null)
+            if(UserController.LoggedAs==null || UserController.LoggedAs.Role==null)
             {
                 foreach (ToolStripItem item in contextMenuStrip1.Items)
                     item.Enabled = false;
                 return;
             }
 
-            if (UserController.LoggedAs.Role.Permissions.Any(x => x.CanAddCategories))
+            if (UserController.LoggedAs.Role.CanAddCategories)
             {
                 _addChildCategory.Enabled = true;
                 _addSiblingCategory.Enabled = true;
             }
+            else
+            {
+                _addChildCategory.Enabled = false;
+                _addSiblingCategory.Enabled = false;
+            }
             
-            if (UserController.LoggedAs.Role.Permissions.Any(x => 
-                    x.ModifiableCategory?.Id == category.Id))
+            if (UserController.LoggedAs.Role.CanModifyCategories)
             {
                 _editCategory.Enabled = true;
                 _removeCategory.Enabled = true;

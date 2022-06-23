@@ -24,7 +24,7 @@ namespace DataBaseManager.Presentation
                 else
                 {
                     label2.Text = UserController.LoggedAs.Name;
-                    if (UserController.LoggedAs.Role.Permissions.Any(x => x.Admin))
+                    if (UserController.LoggedAs.Role.Admin)
                         button2.Enabled = true;
                 }
 

@@ -23,9 +23,6 @@
       <Compile Update="Presentation\FormAdminPanel.cs">
         <SubType>Form</SubType>
       </Compile>
-      <Compile Update="Presentation\FormAddPermision.cs">
-        <SubType>Form</SubType>
-      </Compile>
     </ItemGroup>
 
 </Project>

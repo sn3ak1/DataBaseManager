@@ -5,27 +5,17 @@ using System.Windows.Forms;
 
 namespace DataBaseManager.Data
 {
-
-    public class Permission
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool Admin { get; set; }
-        public bool CanAddCategories { get; set; }
-        public Category ModifiableCategory { get; set; }
-        
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
-    
     public class Role
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<User> Users { get; set; }
-        public ICollection<Permission> Permissions { get; set; }
+
+        public bool Admin { get; set; }
+
+        public bool CanAddCategories { get; set; }
+
+        public bool CanModifyCategories { get; set; }
         
         public override string ToString()
         {
